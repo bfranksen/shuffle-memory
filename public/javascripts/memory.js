@@ -1,7 +1,12 @@
 const gameBoardCards = document.getElementById('game-board');
-let numSelected = 0;
+const selected = [];
+const shiftEnum = Object.freeze({ 0: 'left', 1: 'up', 2: 'right', 3: 'down' });
+let shift = '',
+	turns = 0,
+	matches = 0,
+	shuffles = 0;
 
-shiftLeft = (gameBoardCards) => {
+shiftLeft = () => {
 	let index = 0;
 	const array = [];
 	const temp = Object.assign([], gameBoardCards.childNodes);
@@ -22,7 +27,7 @@ shiftLeft = (gameBoardCards) => {
 	}
 };
 
-shiftUp = (gameBoardCards) => {
+shiftUp = () => {
 	let order = '';
 	for (let card of gameBoardCards.childNodes) {
 		for (let c of card.classList) {
@@ -41,7 +46,7 @@ shiftUp = (gameBoardCards) => {
 	}
 };
 
-shiftRight = (gameBoardCards) => {
+shiftRight = () => {
 	let index = 0;
 	const array = [];
 	const temp = Object.assign([], gameBoardCards.childNodes);
@@ -62,7 +67,7 @@ shiftRight = (gameBoardCards) => {
 	}
 };
 
-shiftDown = (gameBoardCards) => {
+shiftDown = () => {
 	let order = '';
 	for (let card of gameBoardCards.childNodes) {
 		for (let c of card.classList) {
@@ -82,20 +87,24 @@ shiftDown = (gameBoardCards) => {
 	}
 };
 
-getDirection = (gameBoardCards) => {
+getShiftDirection = () => {
 	const num = Math.floor(Math.random() * 4);
-	switch (num) {
-		case 0:
-			shiftLeft(gameBoardCards);
+	return shiftEnum[num];
+};
+
+shiftBoard = () => {
+	switch (shift) {
+		case 'left':
+			shiftLeft();
 			break;
-		case 1:
-			shiftUp(gameBoardCards);
+		case 'up':
+			shiftUp();
 			break;
-		case 2:
-			shiftRight(gameBoardCards);
+		case 'right':
+			shiftRight();
 			break;
-		case 3:
-			shiftDown(gameBoardCards);
+		case 'down':
+			shiftDown();
 			break;
 	}
 };
@@ -134,15 +143,14 @@ setUpClasses = () => {
 			}
 		}
 		el.addEventListener('click', () => {
-			if (!el.classList.contains('active')) {
+			if (!el.classList.contains('active') && selected.length < 2) {
 				list.toggle(name);
 				list.toggle('card-front');
 				list.toggle('card-back');
 				el.classList.toggle('active');
-				numSelected++;
-				if (numSelected > 1) {
-					document.querySelector('main').classList.toggle('freeze');
-					checkMatch(el);
+				selected.push(el);
+				if (selected.length > 1) {
+					checkMatch();
 				}
 			}
 		});
@@ -150,17 +158,65 @@ setUpClasses = () => {
 		list.toggle(name);
 		list.toggle('card-front');
 	}
+	shift = getShiftDirection();
+	document
+		.querySelector('#next-shuffle i')
+		.classList.toggle(`fa-arrow-${shift}`);
+};
+
+matchedCardReset = (node) => {
+	const element = node.childNodes[0];
+	element.classList.remove(...element.classList);
+	node.classList.remove('active', 'matched-initial');
+	node.classList.add('matched-final');
+};
+
+cardReset = (node) => {
+	const element = node.childNodes[0];
+	element.classList.remove(...element.classList);
+	element.classList.add('mx-auto', 'card-back');
+	node.classList.remove('active');
+};
+
+match = () => {
+	selected[0].classList.toggle('matched-initial');
+	selected[1].classList.toggle('matched-initial');
+	selected[1].addEventListener(
+		'transitionend',
+		() => {
+			setTimeout(() => {
+				matchedCardReset(selected[0]);
+				matchedCardReset(selected[1]);
+				selected.splice(0, selected.length);
+				document.querySelector('#matches span').innerHTML = ++matches;
+			}, 1000);
+		},
+		{
+			once: true,
+		}
+	);
+};
+
+unmatched = () => {
+	setTimeout(() => {
+		cardReset(selected[0]);
+		cardReset(selected[1]);
+		selected.splice(0, selected.length);
+		document.querySelector('#shuffles span').innerHTML = ++shuffles;
+		shiftBoard();
+		document
+			.querySelector('#next-shuffle i')
+			.classList.toggle(`fa-arrow-${shift}`);
+		shift = getShiftDirection();
+		document
+			.querySelector('#next-shuffle i')
+			.classList.toggle(`fa-arrow-${shift}`);
+	}, 750);
 };
 
 checkMatch = () => {
 	let pokeOne,
 		pokeTwo = '';
-	const selected = [];
-	for (const el of gameBoardCards.childNodes) {
-		if (el.childNodes[0].classList.contains('active')) {
-			selected.push(el.childNodes[0]);
-		}
-	}
 	for (const name of selected[0].childNodes[0].classList) {
 		if (name.startsWith('poke')) {
 			pokeOne = name;
@@ -174,40 +230,30 @@ checkMatch = () => {
 		}
 	}
 	if (pokeOne === pokeTwo) {
-		selected[0].classList.toggle('matched-initial');
-		selected[1].classList.toggle('matched-initial');
-		console.log(selected[0]);
-		selected[1].addEventListener('transitionend', () => {
-			console.log('transitioned!');
-			document.querySelector('main').classList.toggle('freeze');
+		selected[1].addEventListener('transitionend', match, {
+			once: true,
 		});
-		return;
+	} else {
+		selected[1].addEventListener('transitionend', unmatched, {
+			once: true,
+		});
 	}
-	selected[0].childNodes[0].classList.toggle(pokeOne);
-	selected[1].childNodes[0].classList.toggle(pokeTwo);
-	selected[0].childNodes[0].classList.toggle('card-front');
-	selected[1].childNodes[0].classList.toggle('card-front');
-	selected[0].childNodes[0].classList.toggle('card-back');
-	selected[1].childNodes[0].classList.toggle('card-back');
-	selected[0].classList.toggle('active');
-	selected[1].classList.toggle('active');
-	document.querySelector('main').classList.toggle('freeze');
-	numSelected = 0;
+	document.querySelector('#turns span').innerHTML = ++turns;
 };
 
 (function () {
-	document.getElementById('left').addEventListener('click', () => {
-		shiftLeft(gameBoardCards);
-	});
-	document.getElementById('up').addEventListener('click', () => {
-		shiftUp(gameBoardCards);
-	});
-	document.getElementById('right').addEventListener('click', () => {
-		shiftRight(gameBoardCards);
-	});
-	document.getElementById('down').addEventListener('click', () => {
-		shiftDown(gameBoardCards);
-	});
+	// document.getElementById('left').addEventListener('click', () => {
+	// 	shiftLeft(gameBoardCards);
+	// });
+	// document.getElementById('up').addEventListener('click', () => {
+	// 	shiftUp(gameBoardCards);
+	// });
+	// document.getElementById('right').addEventListener('click', () => {
+	// 	shiftRight(gameBoardCards);
+	// });
+	// document.getElementById('down').addEventListener('click', () => {
+	// 	shiftDown(gameBoardCards);
+	// });
 
 	// getDirection(gameBoardCards);
 	setUpClasses();

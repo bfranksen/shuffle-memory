@@ -1,23 +1,32 @@
 extends layout
 
 block content
-  .d-flex.flex-column.justify-content-center.h-100
-    .my-5
-      h1.text-center Welcome to #{title}
-      .text-center
-        button.m-1#left Left
-        button.m-1#up Up
-        button.m-1#right Right
-        button.m-1#down Down
-    .container
-      .row.g-3#game-board
-        - let x = 0;
-        while x < numCards 
-          .col-3(class=`order-${x % 4 + 1}`)
-            .memory-card(id=`card-${++x}`)
-              .card-back.card-front.mx-auto
-    .container-fluid
-      h2.my-5.text-center Score Keeper
+  .container-fluid.h-100
+    .row.h-100
+      .col-10.h-100#game-board-container
+        h1.display-5.text-center.my-5 Welcome to #{title}
+        .container.d-flex.flex-column
+          .row.g-3#game-board
+            - let x = 0;
+            while x < numCards 
+              .col-3(class=`order-${x % 4 + 1}`)
+                .memory-card(id=`card-${++x}`)
+                  .card-back.card-front.mx-auto
+      .col-2.p-0.h-100.bg-dark.text-light#score-keeper
+        h2.display-5.text-center.my-5.py-1 Score Keeper
+        .d-flex.flex-column.align-items
+          .score-item.text-center.my-2.py-2#next-shuffle
+            h3.display-6.my-0 Next Shuffle 
+            i.my-1.fas.fa-3x
+          .score-item.text-center.my-2.py-2#turns 
+            h3.display-6.my-0 Turns 
+            span.fs-2 0
+          .score-item.text-center.my-2.py-2#matches 
+            h3.display-6.my-0 Matches 
+            span.fs-2 0
+          .score-item.text-center.my-2.py-2#shuffles 
+            h3.display-6.my-0 Shuffles 
+            span.fs-2 0
     script(type="text/javascript").
       const numCards = #{numCards};
     script(type="text/javascript" src="/javascripts/memory.js")

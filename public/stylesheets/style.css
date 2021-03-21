@@ -1,0 +1,104 @@
+.freeze {
+    pointer-events: none;
+}
+
+.memory-card {
+    height: 128px;
+    background-color: rgba(155, 155, 155, 0.2);
+    border: 1px solid #212529;
+}
+
+.memory-card:hover {
+    cursor: pointer;
+    box-shadow: inset 0 0 15px #212529;
+}
+
+.active {
+    transition: all 1s ease;
+    background-color: rgba(230, 130, 130, 0.5);
+    box-shadow: inset 0 0 10px white;
+    transform: rotateY(180deg);
+}
+
+.matched-initial {
+    box-shadow: none;
+    transition: all 1s ease;
+    box-shadow: 0 0 30px #3791eb;
+    border: none;
+    transform: scale(1.1);
+    visibility: hidden;
+}
+
+.matched:hover {
+    box-shadow: 0 0 30px #3791eb;
+    border: none;
+}
+
+.card-front {
+    width: 100%;
+    height: 100%;
+}
+
+.card-back {
+    height: 100%;
+    background-image: url('/images/back-of-card.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.poke-bg-1 {
+    width: 112px;
+    height: 112px;
+    display: block;
+    background: url('/images/pokemon_css_sprites.png') -10px -10px;
+}
+
+.poke-bg-2 {
+    width: 112px;
+    height: 112px;
+    display: block;
+    background: url('/images/pokemon_css_sprites.png') -142px -10px;
+}
+
+.poke-bg-3 {
+    width: 112px;
+    height: 112px;
+    display: block;
+    background: url('/images/pokemon_css_sprites.png') -10px -142px;
+}
+
+.poke-bg-4 {
+    width: 112px;
+    height: 112px;
+    display: block;
+    background: url('/images/pokemon_css_sprites.png') -142px -142px;
+}
+
+.poke-bg-5 {
+    width: 112px;
+    height: 112px;
+    display: block;
+    background: url('/images/pokemon_css_sprites.png') -274px -10px;
+}
+
+.poke-bg-6 {
+    width: 112px;
+    height: 112px;
+    display: block;
+    background: url('/images/pokemon_css_sprites.png') -274px -142px;
+}
+
+.poke-bg-7 {
+    width: 112px;
+    height: 112px;
+    display: block;
+    background: url('/images/pokemon_css_sprites.png') -10px -274px;
+}
+
+.poke-bg-8 {
+    width: 112px;
+    height: 112px;
+    display: block;
+    background: url('/images/pokemon_css_sprites.png') -142px -274px;
+}

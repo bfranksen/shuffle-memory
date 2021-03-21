@@ -1,0 +1,23 @@
+extends layout
+
+block content
+  .d-flex.flex-column.justify-content-center.h-100
+    .my-5
+      h1.text-center Welcome to #{title}
+      .text-center
+        button.m-1#left Left
+        button.m-1#up Up
+        button.m-1#right Right
+        button.m-1#down Down
+    .container
+      .row.g-3#game-board
+        - let x = 0;
+        while x < numCards 
+          .col-3(class=`order-${x % 4 + 1}`)
+            .memory-card(id=`card-${++x}`)
+              .card-back.card-front.mx-auto
+    .container-fluid
+      h2.my-5.text-center Score Keeper
+    script(type="text/javascript").
+      const numCards = #{numCards};
+    script(type="text/javascript" src="/javascripts/memory.js")

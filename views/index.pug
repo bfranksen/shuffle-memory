@@ -13,8 +13,13 @@ block content
                 .memory-card(id=`card-${++x}`)
                   .card-back.card-front.mx-auto
       .col-2.p-0.h-100.bg-dark.text-light#score-keeper
-        h2.display-5.text-center.my-5.py-1 Score Keeper
+        h2.display-5.text-center.my-4.py-1 Score Keeper
         .d-flex.flex-column.align-items
+          .score-item.text-center.my-2.py-2#timer 
+            h3.display-6.my-0 Time
+            span#minutes.fs-2 00
+            span.fs-2 :
+            span#seconds.fs-2 00
           .score-item.text-center.my-2.py-2#next-shuffle
             h3.display-6.my-0 Next Shuffle 
             i.my-1.fas.fa-3x

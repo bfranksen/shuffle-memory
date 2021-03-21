@@ -1,7 +1,8 @@
 const gameBoardCards = document.getElementById('game-board');
-const selected = [];
 const shiftEnum = Object.freeze({ 0: 'left', 1: 'up', 2: 'right', 3: 'down' });
-let shift = '',
+const selected = [];
+let totalSeconds = 0,
+	shift = '',
 	turns = 0,
 	matches = 0,
 	shuffles = 0;
@@ -241,20 +242,24 @@ checkMatch = () => {
 	document.querySelector('#turns span').innerHTML = ++turns;
 };
 
-(function () {
-	// document.getElementById('left').addEventListener('click', () => {
-	// 	shiftLeft(gameBoardCards);
-	// });
-	// document.getElementById('up').addEventListener('click', () => {
-	// 	shiftUp(gameBoardCards);
-	// });
-	// document.getElementById('right').addEventListener('click', () => {
-	// 	shiftRight(gameBoardCards);
-	// });
-	// document.getElementById('down').addEventListener('click', () => {
-	// 	shiftDown(gameBoardCards);
-	// });
+setTime = () => {
+	const minutes = document.getElementById('minutes');
+	const seconds = document.getElementById('seconds');
+	++totalSeconds;
+	seconds.innerHTML = pad(totalSeconds % 60);
+	minutes.innerHTML = pad(parseInt(totalSeconds / 60));
+};
 
-	// getDirection(gameBoardCards);
+pad = (val) => {
+	var valString = val + '';
+	if (valString.length < 2) {
+		return '0' + valString;
+	} else {
+		return valString;
+	}
+};
+
+(function () {
 	setUpClasses();
+	setInterval(setTime, 1000);
 })();

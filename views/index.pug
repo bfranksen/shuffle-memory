@@ -1,10 +1,15 @@
 extends layout
 
 block content
-  .container-fluid.h-100
+  .container-fluid.h-100.mb-5
     .row.h-100
-      .col-10.h-100#game-board-container
-        h1.display-5.text-center.my-5 Welcome to #{title}
+      .col-sm-10.h-sm-100#game-board-container
+        h1.display-5.text-center.mt-5 Welcome to #{title}
+        .mt-3.mb-5.text-center 
+          button.btn.btn-primary.mx-2 Reset Game
+          button.btn.btn-primary.mx-2 Reset Game
+          button.btn.btn-primary.mx-2 Reset Game
+          button.btn.btn-primary.mx-2 Reset Game
         .container.d-flex.flex-column
           .row.g-3#game-board
             - let x = 0;
@@ -12,7 +17,7 @@ block content
               .col-3(class=`order-${x % 4 + 1}`)
                 .memory-card(id=`card-${++x}`)
                   .card-back.card-front.mx-auto
-      .col-2.p-0.h-100.bg-dark.text-light#score-keeper
+      .col-sm-2.p-0.h-sm-100.bg-dark.text-light#score-keeper
         h2.display-5.text-center.my-4.py-1 Score Keeper
         .d-flex.flex-column.align-items
           .score-item.text-center.my-2.py-2#timer 

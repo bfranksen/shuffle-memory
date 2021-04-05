@@ -11,5 +11,5 @@ Shuffle Memory is a twist on the classic Memory game. Any time you are unable to
 
 **Goals**
   - Create a responsive design to allow functionality on all devices and screen sizes
-  - Implement User login/register to allow tracking of statistics and records
+  - Implement user login/register to allow tracking of statistics and records
   - Implement game settings to create a more varied experience
